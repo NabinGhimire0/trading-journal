@@ -63,7 +63,7 @@ export default function TradeList() {
             Filters
           </button>
           <Link
-            to="/trades/new"
+            to="/app/trades/new"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-colors"
           >
             <PlusCircle className="h-5 w-5" />
@@ -130,7 +130,7 @@ export default function TradeList() {
             <Search className="h-12 w-12 text-gray-300 mx-auto mb-3" />
             <p className="text-gray-500">No trades found</p>
             <Link
-              to="/trades/new"
+              to="/app/trades/new"
               className="text-sm text-emerald-600 font-medium hover:text-emerald-700 mt-2 inline-block"
             >
               Add your first trade →
@@ -217,7 +217,7 @@ export default function TradeList() {
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-1">
                         <Link
-                          to={`/trades/${trade.id}`}
+                          to={`/app/trades/${trade.id}`}
                           className="p-1.5 rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
                         >
                           <Eye className="h-4 w-4" />

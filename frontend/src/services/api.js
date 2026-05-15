@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
+const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL || "http://localhost:8080";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -9,7 +11,7 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to add auth token
+// Request interceptor
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -21,7 +23,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// Response interceptor for auth errors
+// Response interceptor
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -47,9 +49,7 @@ export const uploadAPI = {
     const formData = new FormData();
     formData.append("screenshot", file);
     const response = await api.post("/upload/screenshot", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;
   },
@@ -73,14 +73,16 @@ export const analyticsAPI = {
     api.get("/dashboard/monthly-performance", { params: { year } }),
 };
 
-const forexAPI = axios.create({
-  baseURL: API_BASE_URL,
-});
+// ==================== Forex API (public) ====================
+const forexClient = axios.create({ baseURL: API_BASE_URL });
 
 export const forexPublicAPI = {
-  getRates: (base = "USD") => forexAPI.get(`/forex/rates?base=${base}`),
+  getRates: (base = "USD") => forexClient.get(`/forex/rates?base=${base}`),
   getPopularPairs: (base = "USD") =>
-    forexAPI.get(`/forex/popular?base=${base}`),
+    forexClient.get(`/forex/popular?base=${base}`),
 };
+
+// Export upload URL for image display
+export { UPLOAD_URL };
 
 export default api;

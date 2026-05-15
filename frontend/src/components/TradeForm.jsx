@@ -438,7 +438,7 @@ export default function TradeForm({ trade = null }) {
       <div className="flex justify-end gap-3">
         <button
           type="button"
-          onClick={() => navigate("/trades")}
+          onClick={() => navigate("/app/trades")}
           className="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
         >
           Cancel

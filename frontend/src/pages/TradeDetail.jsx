@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { UPLOAD_URL } from "../services/api";
 import {
   fetchTradeById,
   createTradeReview,
@@ -84,7 +85,7 @@ export default function TradeDetail() {
       {/* Header */}
       <div className="flex items-center gap-4">
         <button
-          onClick={() => navigate("/trades")}
+          onClick={() => navigate("/app/trades")}
           className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
         >
           <ArrowLeft className="h-5 w-5 text-gray-600" />
@@ -98,7 +99,7 @@ export default function TradeDetail() {
           </p>
         </div>
         <Link
-          to={`/trades/${trade.id}/edit`}
+          to={`/app/trades/${trade.id}/edit`}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
         >
           <Edit3 className="h-4 w-4" />
@@ -256,7 +257,7 @@ export default function TradeDetail() {
                 src={
                   trade.screenshots.startsWith("http")
                     ? trade.screenshots
-                    : `http://localhost:8080${trade.screenshots}`
+                    : `${UPLOAD_URL}${trade.screenshots}`
                 }
                 alt="Trade screenshot"
                 className="max-w-full max-h-80 rounded-lg border border-gray-200 object-contain"

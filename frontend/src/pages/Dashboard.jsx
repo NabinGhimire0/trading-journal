@@ -76,7 +76,7 @@ export default function Dashboard() {
         </div>
 
         <Link
-          to="/trades/new"
+          to="/app/trades/new"
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-colors self-start"
         >
           <PlusCircle className="h-5 w-5" />
@@ -321,7 +321,7 @@ export default function Dashboard() {
           </h3>
 
           <Link
-            to="/trades"
+            to="/app/trades"
             className="text-sm text-emerald-600 font-medium hover:text-emerald-700"
           >
             View all →
@@ -397,7 +397,7 @@ export default function Dashboard() {
             <BarChart3 className="h-12 w-12 text-gray-300 mx-auto mb-3" />
             <p className="text-gray-500">No trades yet</p>
             <Link
-              to="/trades/new"
+              to="/app/trades/new"
               className="text-sm text-emerald-600 font-medium hover:text-emerald-700 mt-2 inline-block"
             >
               Add your first trade →
