@@ -10,7 +10,7 @@ import (
 // ==================== User Model ====================
 
 type User struct {
-	ID         string         `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()" json:"id"`
+	ID         string         `gorm:"type:uuid;primaryKey;default:gen_random_uuid()" json:"id"`
 	Name       string         `gorm:"size:100;not null" json:"name"`
 	Email      string         `gorm:"size:255;uniqueIndex;not null" json:"email"`
 	Password   string         `gorm:"size:255;not null" json:"-"`
@@ -41,7 +41,7 @@ type JWTClaims struct {
 // ==================== Strategy Model ====================
 
 type Strategy struct {
-	ID          string         `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()" json:"id"`
+	ID          string         `gorm:"type:uuid;primaryKey;default:gen_random_uuid()" json:"id"`
 	UserID      string         `gorm:"type:uuid;index;not null" json:"user_id"`
 	Name        string         `gorm:"size:100;not null" json:"name"`
 	Description string         `json:"description"`
@@ -53,7 +53,7 @@ type Strategy struct {
 // ==================== Trade Model ====================
 
 type Trade struct {
-	ID                  string         `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()" json:"id"`
+	ID                  string         `gorm:"type:uuid;primaryKey;default:gen_random_uuid()" json:"id"`
 	UserID              string         `gorm:"type:uuid;index;not null" json:"user_id"`
 	AssetPair           string         `gorm:"size:50;not null" json:"asset_pair"`
 	TradeType           string         `gorm:"size:10;not null;check:trade_type IN ('BUY','SELL')" json:"trade_type"`
@@ -152,7 +152,7 @@ type UpdateTradeInput struct {
 // ==================== Trade Review Model ====================
 
 type TradeReview struct {
-	ID            string         `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()" json:"id"`
+	ID            string         `gorm:"type:uuid;primaryKey;default:gen_random_uuid()" json:"id"`
 	TradeID       string         `gorm:"type:uuid;uniqueIndex;not null" json:"trade_id"`
 	WhatWentRight string         `json:"what_went_right"`
 	WhatWentWrong string         `json:"what_went_wrong"`
@@ -197,6 +197,9 @@ type StrategyPerf struct {
 	WinRate     float64 `json:"win_rate"`
 	TotalPnL    float64 `json:"total_pnl"`
 	AvgRR       float64 `json:"avg_rr"`
+	RRSum       float64 `json:"-"`
+	RRCount     int     `json:"-"`
+	Wins        int     `json:"-"`
 }
 
 type SessionPerf struct {
@@ -204,6 +207,7 @@ type SessionPerf struct {
 	TotalTrades int     `json:"total_trades"`
 	WinRate     float64 `json:"win_rate"`
 	TotalPnL    float64 `json:"total_pnl"`
+	Wins        int     `json:"-"`
 }
 
 type MonthlyPerformance struct {
