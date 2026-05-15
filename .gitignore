@@ -1,0 +1,70 @@
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# ENV files
+# =========================
+**/.env
+**/.env.local
+**/.env.*.local
+
+# =========================
+# Backend (Go)
+# =========================
+backend/bin/
+backend/tmp/
+backend/*.exe
+backend/*.out
+backend/*.log
+
+# Go build artifacts
+*.exe
+*.out
+*.test
+*.prof
+
+# Go modules cache (optional safety)
+vendor/
+
+# =========================
+# Frontend (React / Vite)
+# =========================
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# Build output
+frontend/build/
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Database / SQL backups
+# =========================
+*.sql.gz
+*.dump
+
+# =========================
+# Docker 
+# =========================
+docker-compose.override.yml
+
+# =========================
+# Optional local files
+# =========================
+*.log
