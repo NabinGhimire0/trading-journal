@@ -73,4 +73,14 @@ export const analyticsAPI = {
     api.get("/dashboard/monthly-performance", { params: { year } }),
 };
 
+const forexAPI = axios.create({
+  baseURL: API_BASE_URL,
+});
+
+export const forexPublicAPI = {
+  getRates: (base = "USD") => forexAPI.get(`/forex/rates?base=${base}`),
+  getPopularPairs: (base = "USD") =>
+    forexAPI.get(`/forex/popular?base=${base}`),
+};
+
 export default api;

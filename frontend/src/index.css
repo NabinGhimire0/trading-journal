@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* Custom base styles */
 @layer base {
   body {
     @apply bg-gray-50 text-gray-900 antialiased;
@@ -20,4 +19,22 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #64748b;
+}
+
+/* Marquee animation for forex ticker */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }

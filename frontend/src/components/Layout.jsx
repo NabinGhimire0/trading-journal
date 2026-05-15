@@ -24,9 +24,9 @@ export default function Layout() {
   };
 
   const navLinks = [
-    { to: "/", label: "Dashboard", icon: BarChart3 },
-    { to: "/trades", label: "Trades", icon: List },
-    { to: "/trades/new", label: "Add Trade", icon: PlusCircle },
+    { to: "/app", label: "Dashboard", icon: BarChart3 },
+    { to: "/app/trades", label: "Trades", icon: List },
+    { to: "/app/trades/new", label: "Add Trade", icon: PlusCircle },
   ];
 
   return (
@@ -36,12 +36,12 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex items-center gap-2">
+            <Link to="/app" className="flex items-center gap-2">
               <TrendingUp className="h-8 w-8 text-emerald-600" />
               <span className="text-xl font-bold text-gray-900">
                 TradeJournal
               </span>
-            </div>
+            </Link>
 
             {/* Desktop nav */}
             <nav className="hidden md:flex items-center gap-1">

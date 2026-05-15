@@ -39,7 +39,7 @@ export default function Register() {
         }),
       ).unwrap();
       toast.success("Account created successfully!");
-      navigate("/");
+      navigate("/app");
     } catch (err) {
       toast.error(err);
     }

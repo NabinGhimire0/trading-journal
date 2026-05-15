@@ -16,6 +16,7 @@ type Config struct {
 	DBSSLMode        string
 	JWTSecret        string
 	JWTExpirationHrs string
+	ForexAPIKey      string
 }
 
 var AppConfig *Config
@@ -23,7 +24,6 @@ var AppConfig *Config
 func LoadConfig() {
 	err := godotenv.Load()
 	if err != nil {
-		// Try loading from parent directory
 		_ = godotenv.Load("../.env")
 	}
 
@@ -37,6 +37,7 @@ func LoadConfig() {
 		DBSSLMode:        getEnv("DB_SSLMODE", "disable"),
 		JWTSecret:        getEnv("JWT_SECRET", "fallback_secret"),
 		JWTExpirationHrs: getEnv("JWT_EXPIRATION_HOURS", "72"),
+		ForexAPIKey:      getEnv("FOREX_API_KEY", ""),
 	}
 }
 

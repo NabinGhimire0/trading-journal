@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"trading-journal/config"
 	"trading-journal/controllers"
 	"trading-journal/middleware"
 
@@ -17,6 +18,13 @@ func SetupRoutes(router *gin.Engine) {
 	})
 
 	api := router.Group("/api")
+
+	// Public routes (no auth)
+	forexController := controllers.NewForexController(config.AppConfig.ForexAPIKey)
+	{
+		api.GET("/forex/rates", forexController.GetRates)
+		api.GET("/forex/popular", forexController.GetPopularPairs)
+	}
 
 	// Auth routes (public)
 	authController := controllers.NewAuthController()

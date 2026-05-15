@@ -25,7 +25,7 @@ export default function Login() {
     try {
       await dispatch(loginUser(formData)).unwrap();
       toast.success("Welcome back!");
-      navigate("/");
+      navigate("/app");
     } catch (err) {
       toast.error(err);
     }
