@@ -8,6 +8,9 @@ import (
 )
 
 func SetupRoutes(router *gin.Engine) {
+	// Serve uploaded files statically
+	router.Static("/uploads", "./uploads")
+
 	// Health check
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "ok"})
@@ -29,6 +32,10 @@ func SetupRoutes(router *gin.Engine) {
 	{
 		// Auth (protected)
 		protected.GET("/auth/me", authController.GetMe)
+
+		// File upload
+		uploadController := controllers.NewUploadController()
+		protected.POST("/upload/screenshot", uploadController.UploadScreenshot)
 
 		// Trades
 		tradeController := controllers.NewTradeController()

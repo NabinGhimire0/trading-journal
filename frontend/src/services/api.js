@@ -41,6 +41,20 @@ export const authAPI = {
   getMe: () => api.get("/auth/me"),
 };
 
+// ==================== Upload API ====================
+export const uploadAPI = {
+  uploadScreenshot: async (file) => {
+    const formData = new FormData();
+    formData.append("screenshot", file);
+    const response = await api.post("/upload/screenshot", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  },
+};
+
 // ==================== Trades API ====================
 export const tradesAPI = {
   create: (data) => api.post("/trades", data),

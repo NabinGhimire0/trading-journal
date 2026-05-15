@@ -252,14 +252,15 @@ export default function TradeDetail() {
           {trade.screenshots && (
             <div className="mt-4">
               <p className="text-sm text-gray-500 mb-2">Screenshot</p>
-              <a
-                href={trade.screenshots}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-emerald-600 text-sm font-medium hover:text-emerald-700"
-              >
-                View Screenshot ↗
-              </a>
+              <img
+                src={
+                  trade.screenshots.startsWith("http")
+                    ? trade.screenshots
+                    : `http://localhost:8080${trade.screenshots}`
+                }
+                alt="Trade screenshot"
+                className="max-w-full max-h-80 rounded-lg border border-gray-200 object-contain"
+              />
             </div>
           )}
         </div>

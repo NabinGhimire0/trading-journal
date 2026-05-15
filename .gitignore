@@ -68,3 +68,7 @@ docker-compose.override.yml
 # Optional local files
 # =========================
 *.log
+
+# Uploaded files (screenshots, user uploads)
+backend/uploads/
+backend/uploads/

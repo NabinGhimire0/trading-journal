@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { createTrade, updateTrade } from "../store/tradesSlice";
+import { uploadAPI } from "../services/api";
+import { Upload, X, Image as ImageIcon } from "lucide-react";
 import toast from "react-hot-toast";
 
 const ASSET_PAIRS = [
@@ -24,6 +26,7 @@ export default function TradeForm({ trade = null }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isEditing = !!trade;
+  const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
     asset_pair: trade?.asset_pair || "",
@@ -48,6 +51,51 @@ export default function TradeForm({ trade = null }) {
   });
 
   const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(trade?.screenshots || "");
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size must be less than 5MB");
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Only JPG, PNG, GIF, and WebP images are allowed");
+      return;
+    }
+
+    // Show local preview immediately
+    const localPreview = URL.createObjectURL(file);
+    setPreviewUrl(localPreview);
+
+    // Upload to server
+    setUploading(true);
+    try {
+      const result = await uploadAPI.uploadScreenshot(file);
+      setFormData((prev) => ({ ...prev, screenshots: result.url }));
+      toast.success("Screenshot uploaded!");
+    } catch (err) {
+      toast.error("Failed to upload screenshot");
+      setPreviewUrl("");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeScreenshot = () => {
+    setFormData((prev) => ({ ...prev, screenshots: "" }));
+    setPreviewUrl("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -73,7 +121,6 @@ export default function TradeForm({ trade = null }) {
       };
 
       if (isEditing) {
-        // Build update payload with only changed fields
         const updatePayload = {};
         Object.keys(payload).forEach((key) => {
           updatePayload[key] = payload[key];
@@ -320,18 +367,71 @@ export default function TradeForm({ trade = null }) {
               className={inputClass}
             />
           </div>
-          <div>
-            <label className={labelClass}>Screenshot URL</label>
-            <input
-              type="url"
-              name="screenshots"
-              value={formData.screenshots}
-              onChange={handleChange}
-              placeholder="https://example.com/screenshot.png"
-              className={inputClass}
-            />
-          </div>
         </div>
+      </div>
+
+      {/* Screenshot Upload */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Screenshot</h3>
+
+        {previewUrl ? (
+          <div className="relative inline-block">
+            <img
+              src={
+                previewUrl.startsWith("blob:")
+                  ? previewUrl
+                  : `http://localhost:8080${previewUrl}`
+              }
+              alt="Trade screenshot"
+              className="max-w-full max-h-64 rounded-lg border border-gray-200 object-contain"
+            />
+            <button
+              type="button"
+              onClick={removeScreenshot}
+              className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            {uploading && (
+              <div className="absolute inset-0 bg-black/40 rounded-lg flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div
+            onClick={() => fileInputRef.current?.click()}
+            className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/50 transition-colors"
+          >
+            <ImageIcon className="h-10 w-10 text-gray-400 mx-auto mb-3" />
+            <p className="text-sm text-gray-600 font-medium">
+              Click to upload screenshot
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              JPG, PNG, GIF, WebP (max 5MB)
+            </p>
+            {uploading && (
+              <div className="mt-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-600 mx-auto"></div>
+                <p className="text-xs text-emerald-600 mt-2">Uploading...</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/gif,image/webp"
+          onChange={handleFileChange}
+          className="hidden"
+        />
+
+        {formData.screenshots && !previewUrl && (
+          <p className="mt-2 text-sm text-gray-500">
+            Current: {formData.screenshots}
+          </p>
+        )}
       </div>
 
       {/* Submit */}
@@ -345,7 +445,7 @@ export default function TradeForm({ trade = null }) {
         </button>
         <button
           type="submit"
-          disabled={submitting}
+          disabled={submitting || uploading}
           className="px-6 py-2.5 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700 disabled:opacity-50 transition-colors"
         >
           {submitting
